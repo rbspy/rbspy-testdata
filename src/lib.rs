@@ -53,6 +53,8 @@ lazy_static! {
         load_coredump("ruby-coredump-1.9.3.gz").unwrap();
     pub static ref COREDUMP_2_1_6: CoreDump =
         load_coredump("ruby-coredump-2.1.6.gz").unwrap();
+    pub static ref COREDUMP_2_1_6_C_FUNCTION: CoreDump =
+        load_coredump("ruby-coredump-2.1.6_c_function.gz").unwrap();
     pub static ref COREDUMP_2_4_0: CoreDump =
         load_coredump("ruby-coredump-2.4.0.gz").unwrap();
     pub static ref COREDUMP_2_5_0: CoreDump =
