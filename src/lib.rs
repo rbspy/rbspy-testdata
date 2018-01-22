@@ -55,6 +55,14 @@ lazy_static! {
         load_coredump("ruby-coredump-2.1.6.gz").unwrap();
     pub static ref COREDUMP_2_4_0: CoreDump =
         load_coredump("ruby-coredump-2.4.0.gz").unwrap();
+    pub static ref COREDUMP_2_4_0_2: CoreDump =
+        load_coredump("ruby-coredump-2.4.0_2.gz").unwrap();
+    pub static ref COREDUMP_2_4_0_3: CoreDump =
+        load_coredump("ruby-coredump-2.4.0_2.gz").unwrap();
+    pub static ref COREDUMP_2_4_0_4: CoreDump =
+        load_coredump("ruby-coredump-2.4.0_2.gz").unwrap();
+    pub static ref COREDUMP_2_4_0_5: CoreDump =
+        load_coredump("ruby-coredump-2.4.0_2.gz").unwrap();
     pub static ref COREDUMP_2_5_0: CoreDump =
         load_coredump("ruby-coredump-2.5.0.gz").unwrap();
 }
