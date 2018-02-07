@@ -2,6 +2,12 @@
 name = "rbspy-testdata"
 version = "0.1.0"
 authors = ["Kamal Marhubi <kamal@marhubi.com>"]
+description = "Test data for rbspy"
+license = "MIT"
+repository = "https://github.com/rbspy/rbspy-testdata"
+homepage = "https://github.com/rbspy/rbspy-testdata"
+readme = "README.md"
+
 
 [dependencies]
 byteorder = "0.5"
