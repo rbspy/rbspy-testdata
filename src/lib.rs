@@ -3,7 +3,6 @@
 extern crate elf;
 #[macro_use] extern crate failure;
 extern crate flate2;
-#[macro_use] extern crate lazy_static;
 extern crate libc;
 extern crate read_process_memory;
 
@@ -48,17 +47,20 @@ fn load_coredump<P: AsRef<Path>>(name: P) -> Result<CoreDump, Error> {
     }
 }
 
-lazy_static! {
-    pub static ref COREDUMP_1_9_3: CoreDump =
-        load_coredump("ruby-coredump-1.9.3.gz").unwrap();
-    pub static ref COREDUMP_2_1_6: CoreDump =
-        load_coredump("ruby-coredump-2.1.6.gz").unwrap();
-    pub static ref COREDUMP_2_1_6_C_FUNCTION: CoreDump =
-        load_coredump("ruby-coredump-2.1.6_c_function.gz").unwrap();
-    pub static ref COREDUMP_2_4_0: CoreDump =
-        load_coredump("ruby-coredump-2.4.0.gz").unwrap();
-    pub static ref COREDUMP_2_5_0: CoreDump =
-        load_coredump("ruby-coredump-2.5.0.gz").unwrap();
+pub fn coredump_1_9_3() -> CoreDump {
+    load_coredump("ruby-coredump-1.9.3.gz").unwrap()
+}
+pub fn coredump_2_1_6() ->  CoreDump {
+    load_coredump("ruby-coredump-2.1.6.gz").unwrap()
+}
+pub fn coredump_2_1_6_c_function() -> CoreDump {
+    load_coredump("ruby-coredump-2.1.6_c_function.gz").unwrap()
+}
+pub fn coredump_2_4_0() -> CoreDump {
+    load_coredump("ruby-coredump-2.4.0.gz").unwrap()
+}
+pub fn coredump_2_5_0() -> CoreDump {
+    load_coredump("ruby-coredump-2.5.0.gz").unwrap()
 }
 
 /// Allows testing offline with a core dump of a Ruby process.
