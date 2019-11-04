@@ -4,13 +4,13 @@ extern crate elf;
 #[macro_use] extern crate failure;
 extern crate flate2;
 extern crate libc;
-extern crate read_process_memory;
+extern crate remoteprocess;
 
 use std::fs::File;
 use std::io::{self, BufReader, Cursor, Read};
 use std::path::Path;
 
-use read_process_memory::CopyAddress;
+use remoteprocess::{ProcessMemory, Error as ProcessError};
 use failure::{Error, ResultExt};
 
 
@@ -74,8 +74,8 @@ impl From<elf::File> for CoreDump {
     }
 }
 
-impl CopyAddress for CoreDump {
-    fn copy_address(&self, addr: usize, buf: &mut [u8]) -> io::Result<()> {
+impl ProcessMemory for CoreDump {
+    fn read(&self, addr: usize, buf: &mut [u8]) -> Result<(), ProcessError> {
         let start = addr as u64;
         let end = (addr + buf.len()) as u64;
         match self.file.sections.iter().find(|section| {
@@ -87,7 +87,11 @@ impl CopyAddress for CoreDump {
                 buf.copy_from_slice(&sec.data[start..end]);
                 Ok(())
             }
-            None => Err(io::Error::from_raw_os_error(libc::EFAULT)),
+            None => {
+                let io_error = io::Error::from_raw_os_error(libc::EFAULT);
+
+                Err(ProcessError::IOError(io_error))
+            }
         }
     }
 }
