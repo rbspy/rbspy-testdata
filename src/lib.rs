@@ -67,6 +67,10 @@ pub fn coredump_2_7_2() -> CoreDump {
     load_coredump("ruby-coredump-2.7.2.gz").unwrap()
 }
 
+pub fn coredump_3_0_0() -> CoreDump {
+    load_coredump("ruby-coredump-3.0.0.gz").unwrap()
+}
+
 /// Allows testing offline with a core dump of a Ruby process.
 pub struct CoreDump {
     file: elf::File,
