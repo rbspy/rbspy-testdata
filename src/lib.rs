@@ -29,7 +29,7 @@ fn data_file<P: AsRef<Path>>(name: P) -> Result<File, Error> {
 fn data_file_gz_contents<P: AsRef<Path>>(name: P) -> Result<Vec<u8>, Error> {
     let file = BufReader::new(data_file(&name)?);
     let mut data = vec![];
-    GzDecoder::new(file)?.read_to_end(&mut data)
+    GzDecoder::new(file).read_to_end(&mut data)
         .context(format!("failed to read gzipped data file `{}`", name.as_ref().display()))?;
 
     Ok(data)

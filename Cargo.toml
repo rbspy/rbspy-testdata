@@ -1,6 +1,6 @@
 [package]
 name = "rbspy-testdata"
-version = "0.1.2"
+version = "0.1.3"
 authors = ["Kamal Marhubi <kamal@marhubi.com>"]
 description = "Test data for rbspy"
 license = "MIT"
@@ -10,9 +10,9 @@ readme = "README.md"
 
 
 [dependencies]
-byteorder = "0.5"
+byteorder = "1.4.3"
 elf = "0.0.10"
 failure = "0.1.1"
-flate2 = "0.2.14"
+flate2 = "1.0.20"
 libc = "0.2.15"
 remoteprocess = "0.4.3"
