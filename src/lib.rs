@@ -1,7 +1,8 @@
 //! Data for use in rbspy tests and benchmarks :-)
 
 extern crate elf;
-#[macro_use] extern crate failure;
+#[macro_use]
+extern crate failure;
 extern crate flate2;
 extern crate libc;
 extern crate remoteprocess;
@@ -10,27 +11,31 @@ use std::fs::File;
 use std::io::{self, BufReader, Cursor, Read};
 use std::path::Path;
 
-use remoteprocess::{ProcessMemory, Error as ProcessError};
 use failure::{Error, ResultExt};
-
+use remoteprocess::{Error as ProcessError, ProcessMemory};
 
 use self::flate2::bufread::GzDecoder;
 
 /// Open data file `name`.
 fn data_file<P: AsRef<Path>>(name: P) -> Result<File, Error> {
     let name = name.as_ref();
-    let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("data").join(name);
+    let path = Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("data")
+        .join(name);
 
-    Ok(File::open(&path)
-        .context(format!("could not open data file `{}`", path.display()))?)
+    Ok(File::open(&path).context(format!("could not open data file `{}`", path.display()))?)
 }
 
 /// Get contents of gzipped data file `name`.
 fn data_file_gz_contents<P: AsRef<Path>>(name: P) -> Result<Vec<u8>, Error> {
     let file = BufReader::new(data_file(&name)?);
     let mut data = vec![];
-    GzDecoder::new(file).read_to_end(&mut data)
-        .context(format!("failed to read gzipped data file `{}`", name.as_ref().display()))?;
+    GzDecoder::new(file)
+        .read_to_end(&mut data)
+        .context(format!(
+            "failed to read gzipped data file `{}`",
+            name.as_ref().display()
+        ))?;
 
     Ok(data)
 }
@@ -41,16 +46,18 @@ fn load_coredump<P: AsRef<Path>>(name: P) -> Result<CoreDump, Error> {
 
     match elf::File::open_stream(&mut Cursor::new(data)) {
         Ok(elf_file) => Ok(CoreDump::from(elf_file)),
-        Err(e) => Err(format_err!("could not parse elf file `{}`: {:?}",
-                                  name.as_ref().display(),
-                                  e)),
+        Err(e) => Err(format_err!(
+            "could not parse elf file `{}`: {:?}",
+            name.as_ref().display(),
+            e
+        )),
     }
 }
 
 pub fn coredump_1_9_3() -> CoreDump {
     load_coredump("ruby-coredump-1.9.3.gz").unwrap()
 }
-pub fn coredump_2_1_6() ->  CoreDump {
+pub fn coredump_2_1_6() -> CoreDump {
     load_coredump("ruby-coredump-2.1.6.gz").unwrap()
 }
 pub fn coredump_2_1_6_c_function() -> CoreDump {
@@ -78,7 +85,7 @@ pub struct CoreDump {
 
 impl From<elf::File> for CoreDump {
     fn from(file: elf::File) -> CoreDump {
-        CoreDump { file: file }
+        CoreDump { file }
     }
 }
 
