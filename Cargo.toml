@@ -1,6 +1,6 @@
 [package]
 name = "rbspy-testdata"
-version = "0.1.3"
+version = "0.1.4"
 authors = ["Kamal Marhubi <kamal@marhubi.com>", "Adam Jensen <adam@acj.sh>"]
 description = "Test data for rbspy"
 license = "MIT"
