@@ -9,7 +9,7 @@ use std::fs::File;
 use std::io::{self, BufReader, Cursor, Read};
 use std::path::Path;
 
-use anyhow::{Context, Error, format_err};
+use anyhow::{format_err, Context, Error};
 use remoteprocess::{Error as ProcessError, ProcessMemory};
 
 use self::flate2::bufread::GzDecoder;
