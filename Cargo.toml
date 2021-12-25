@@ -7,6 +7,7 @@ license = "MIT"
 repository = "https://github.com/rbspy/rbspy-testdata"
 homepage = "https://github.com/rbspy/rbspy-testdata"
 readme = "README.md"
+edition = "2021"
 
 
 [dependencies]
