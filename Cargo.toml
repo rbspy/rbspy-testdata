@@ -10,9 +10,8 @@ readme = "README.md"
 
 
 [dependencies]
-byteorder = "1.4.3"
+anyhow = "1.0"
 elf = "0.0.10"
-failure = "0.1.1"
 flate2 = "1.0.20"
 libc = "0.2.15"
 remoteprocess = "0.4.3"

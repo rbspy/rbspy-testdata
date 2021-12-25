@@ -1,8 +1,6 @@
 //! Data for use in rbspy tests and benchmarks :-)
 
 extern crate elf;
-#[macro_use]
-extern crate failure;
 extern crate flate2;
 extern crate libc;
 extern crate remoteprocess;
@@ -11,7 +9,7 @@ use std::fs::File;
 use std::io::{self, BufReader, Cursor, Read};
 use std::path::Path;
 
-use failure::{Error, ResultExt};
+use anyhow::{Context, Error, format_err};
 use remoteprocess::{Error as ProcessError, ProcessMemory};
 
 use self::flate2::bufread::GzDecoder;
