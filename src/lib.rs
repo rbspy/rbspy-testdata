@@ -120,3 +120,14 @@ impl ProcessMemory for CoreDump {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_load_coredump() {
+        let coredump = load_coredump("ruby-coredump-3.3.0.gz").unwrap();
+        assert_eq!(coredump.file.sections.len(), 122);
+    }
+}
