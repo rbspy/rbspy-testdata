@@ -1,22 +1,17 @@
 //! Data for use in rbspy tests and benchmarks :-)
 
-extern crate elf;
-extern crate flate2;
-extern crate libc;
-extern crate remoteprocess;
-
 use std::fs::File;
-use std::io::{self, BufReader, Cursor, Read};
+use std::io::{self, BufReader, Read};
 use std::path::Path;
 
-use anyhow::{format_err, Context, Error};
+use anyhow::{Context, Result};
+use goblin::elf;
 use remoteprocess::{Error as ProcessError, ProcessMemory};
 
-use self::flate2::bufread::GzDecoder;
+use flate2::bufread::GzDecoder;
 
 /// Open data file `name`.
-fn data_file<P: AsRef<Path>>(name: P) -> Result<File, Error> {
-    let name = name.as_ref();
+fn data_file(name: &str) -> Result<File> {
     let path = Path::new(env!("CARGO_MANIFEST_DIR"))
         .join("data")
         .join(name);
@@ -25,31 +20,18 @@ fn data_file<P: AsRef<Path>>(name: P) -> Result<File, Error> {
 }
 
 /// Get contents of gzipped data file `name`.
-fn data_file_gz_contents<P: AsRef<Path>>(name: P) -> Result<Vec<u8>, Error> {
+fn data_file_gz_contents(name: &str) -> Result<Vec<u8>> {
     let file = BufReader::new(data_file(&name)?);
     let mut data = vec![];
     GzDecoder::new(file)
         .read_to_end(&mut data)
-        .context(format!(
-            "failed to read gzipped data file `{}`",
-            name.as_ref().display()
-        ))?;
-
+        .context(format!("failed to read gzipped data file `{}`", name))?;
     Ok(data)
 }
 
 /// Load coredump from gzipped data file `name`.
-fn load_coredump<P: AsRef<Path>>(name: P) -> Result<CoreDump, Error> {
-    let data = data_file_gz_contents(&name)?;
-
-    match elf::File::open_stream(&mut Cursor::new(data)) {
-        Ok(elf_file) => Ok(CoreDump::from(elf_file)),
-        Err(e) => Err(format_err!(
-            "could not parse elf file `{}`: {:?}",
-            name.as_ref().display(),
-            e
-        )),
-    }
+fn load_coredump(name: &str) -> Result<CoreDump> {
+    CoreDump::new(data_file_gz_contents(name)?)
 }
 
 pub fn coredump_1_9_3() -> CoreDump {
@@ -90,12 +72,18 @@ pub fn coredump_3_3_0() -> CoreDump {
 
 /// Allows testing offline with a core dump of a Ruby process.
 pub struct CoreDump {
-    file: elf::File,
+    raw_memory: Vec<u8>,
+    elf_section_headers: Vec<elf::SectionHeader>,
 }
 
-impl From<elf::File> for CoreDump {
-    fn from(file: elf::File) -> CoreDump {
-        CoreDump { file }
+impl CoreDump {
+    pub fn new(raw_memory: Vec<u8>) -> Result<Self> {
+        let elf = elf::Elf::parse(&raw_memory).context("failed to parse ELF header")?;
+        let elf_section_headers = elf.section_headers;
+        Ok(CoreDump {
+            raw_memory,
+            elf_section_headers,
+        })
     }
 }
 
@@ -103,18 +91,19 @@ impl ProcessMemory for CoreDump {
     fn read(&self, addr: usize, buf: &mut [u8]) -> Result<(), ProcessError> {
         let start = addr as u64;
         let end = (addr + buf.len()) as u64;
-        match self.file.sections.iter().find(|section| {
-            section.shdr.sh_addr <= start && end <= section.shdr.sh_addr + section.shdr.sh_size
-        }) {
+        match self
+            .elf_section_headers
+            .iter()
+            .find(|section| section.sh_addr <= start && end <= section.sh_addr + section.sh_size)
+        {
             Some(sec) => {
-                let start = addr - sec.shdr.sh_addr as usize;
-                let end = addr + buf.len() - sec.shdr.sh_addr as usize;
-                buf.copy_from_slice(&sec.data[start..end]);
+                let start = sec.sh_offset as usize + addr - sec.sh_addr as usize;
+                let end = start + buf.len();
+                buf.copy_from_slice(&self.raw_memory[start..end]);
                 Ok(())
             }
             None => {
                 let io_error = io::Error::from_raw_os_error(libc::EFAULT);
-
                 Err(ProcessError::IOError(io_error))
             }
         }
@@ -128,6 +117,6 @@ mod tests {
     #[test]
     fn test_load_coredump() {
         let coredump = load_coredump("ruby-coredump-3.3.0.gz").unwrap();
-        assert_eq!(coredump.file.sections.len(), 122);
+        assert_eq!(coredump.elf_section_headers.len(), 122);
     }
 }
