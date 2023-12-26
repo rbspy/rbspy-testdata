@@ -104,11 +104,11 @@ impl ProcessMemory for CoreDump {
         let start = addr as u64;
         let end = (addr + buf.len()) as u64;
         match self.file.sections.iter().find(|section| {
-            section.shdr.addr <= start && end <= section.shdr.addr + section.shdr.size
+            section.shdr.sh_addr <= start && end <= section.shdr.sh_addr + section.shdr.sh_size
         }) {
             Some(sec) => {
-                let start = addr - sec.shdr.addr as usize;
-                let end = addr + buf.len() - sec.shdr.addr as usize;
+                let start = addr - sec.shdr.sh_addr as usize;
+                let end = addr + buf.len() - sec.shdr.sh_addr as usize;
                 buf.copy_from_slice(&sec.data[start..end]);
                 Ok(())
             }
