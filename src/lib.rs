@@ -116,6 +116,24 @@ mod tests {
 
     #[test]
     fn test_load_coredump() {
+        let coredump = load_coredump("ruby-coredump-1.9.3.gz").unwrap();
+        assert_eq!(coredump.elf_section_headers.len(), 36);
+        let coredump = load_coredump("ruby-coredump-2.1.6.gz").unwrap();
+        assert_eq!(coredump.elf_section_headers.len(), 40);
+        let coredump = load_coredump("ruby-coredump-2.1.6_c_function.gz").unwrap();
+        assert_eq!(coredump.elf_section_headers.len(), 102);
+        let coredump = load_coredump("ruby-coredump-2.4.0.gz").unwrap();
+        assert_eq!(coredump.elf_section_headers.len(), 38);
+        let coredump = load_coredump("ruby-coredump-2.5.0.gz").unwrap();
+        assert_eq!(coredump.elf_section_headers.len(), 38);
+        let coredump = load_coredump("ruby-coredump-2.7.2.gz").unwrap();
+        assert_eq!(coredump.elf_section_headers.len(), 119);
+        let coredump = load_coredump("ruby-coredump-3.0.0.gz").unwrap();
+        assert_eq!(coredump.elf_section_headers.len(), 119);
+        let coredump = load_coredump("ruby-coredump-3.1.0.gz").unwrap();
+        assert_eq!(coredump.elf_section_headers.len(), 119);
+        let coredump = load_coredump("ruby-coredump-3.2.0.gz").unwrap();
+        assert_eq!(coredump.elf_section_headers.len(), 120);
         let coredump = load_coredump("ruby-coredump-3.3.0.gz").unwrap();
         assert_eq!(coredump.elf_section_headers.len(), 122);
     }
