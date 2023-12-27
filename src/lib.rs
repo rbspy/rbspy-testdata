@@ -118,23 +118,86 @@ mod tests {
     fn test_load_coredump() {
         let coredump = load_coredump("ruby-coredump-1.9.3.gz").unwrap();
         assert_eq!(coredump.elf_section_headers.len(), 36);
+        let buf = &mut [0u8; 16];
+        coredump.read(0x823930, buf).expect("read failed");
+        assert_eq!(buf, &[32, 21, 73, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+
         let coredump = load_coredump("ruby-coredump-2.1.6.gz").unwrap();
         assert_eq!(coredump.elf_section_headers.len(), 40);
+        let buf = &mut [0u8; 16];
+        coredump.read(0x562658abd7f0, buf).expect("read failed");
+        assert_eq!(
+            buf,
+            &[176, 165, 200, 89, 38, 86, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        );
+
         let coredump = load_coredump("ruby-coredump-2.1.6_c_function.gz").unwrap();
         assert_eq!(coredump.elf_section_headers.len(), 102);
+        let buf = &mut [0u8; 16];
+        coredump.read(0x562efcd577f0, buf).expect("read failed");
+        assert_eq!(
+            buf,
+            &[176, 198, 255, 254, 46, 86, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        );
+
         let coredump = load_coredump("ruby-coredump-2.4.0.gz").unwrap();
         assert_eq!(coredump.elf_section_headers.len(), 38);
+        let buf = &mut [0u8; 16];
+        coredump.read(0x55df44959920, buf).expect("read failed");
+        assert_eq!(
+            buf,
+            &[208, 165, 37, 70, 223, 85, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        );
+
         let coredump = load_coredump("ruby-coredump-2.5.0.gz").unwrap();
         assert_eq!(coredump.elf_section_headers.len(), 38);
+        let buf = &mut [0u8; 16];
+        coredump.read(0x55dd8c3b7758, buf).expect("read failed");
+        assert_eq!(
+            buf,
+            &[216, 136, 151, 140, 221, 85, 0, 0, 32, 127, 151, 140, 221, 85, 0, 0]
+        );
+
         let coredump = load_coredump("ruby-coredump-2.7.2.gz").unwrap();
         assert_eq!(coredump.elf_section_headers.len(), 119);
+        let buf = &mut [0u8; 16];
+        coredump.read(0x7fdd8d626070, buf).expect("read failed");
+        assert_eq!(
+            buf,
+            &[208, 166, 207, 100, 196, 85, 0, 0, 160, 155, 207, 100, 196, 85, 0, 0]
+        );
+
         let coredump = load_coredump("ruby-coredump-3.0.0.gz").unwrap();
         assert_eq!(coredump.elf_section_headers.len(), 119);
+        let buf = &mut [0u8; 16];
+        coredump.read(0x7fdacdab7470, buf).expect("read failed");
+        assert_eq!(
+            buf,
+            &[160, 235, 191, 181, 200, 85, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        );
+
         let coredump = load_coredump("ruby-coredump-3.1.0.gz").unwrap();
         assert_eq!(coredump.elf_section_headers.len(), 119);
+        let buf = &mut [0u8; 16];
+        coredump.read(0x7f0dc0c83c58, buf).expect("read failed");
+        assert_eq!(
+            buf,
+            &[64, 186, 97, 2, 255, 85, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        );
+
         let coredump = load_coredump("ruby-coredump-3.2.0.gz").unwrap();
         assert_eq!(coredump.elf_section_headers.len(), 120);
+        let buf = &mut [0u8; 16];
+        coredump.read(0xffffb8034578, buf).expect("read failed");
+        assert_eq!(
+            buf,
+            &[208, 250, 146, 227, 170, 170, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        );
+
         let coredump = load_coredump("ruby-coredump-3.3.0.gz").unwrap();
         assert_eq!(coredump.elf_section_headers.len(), 122);
+        let buf = &mut [0u8; 16];
+        coredump.read(0x7f7ff21f1868, buf).expect("read failed");
+        assert_eq!(buf, &[16, 3, 62, 88, 13, 86, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
     }
 }
