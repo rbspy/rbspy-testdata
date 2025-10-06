@@ -199,10 +199,13 @@ mod tests {
         );
 
         let coredump = load_coredump("ruby-coredump-3.3.0.gz").unwrap();
-        assert_eq!(coredump.elf_section_headers.len(), 122);
+        assert_eq!(coredump.elf_section_headers.len(), 151);
         let buf = &mut [0u8; 16];
-        coredump.read(0x7f7ff21f1868, buf).expect("read failed");
-        assert_eq!(buf, &[16, 3, 62, 88, 13, 86, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+        coredump.read(0x7f43435f4988, buf).expect("read failed");
+        assert_eq!(
+            buf,
+            &[16, 51, 89, 134, 131, 85, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        );
 
         let coredump = load_coredump("ruby-coredump-with-classes-3.3.0.gz").unwrap();
         assert_eq!(coredump.elf_section_headers.len(), 124);
