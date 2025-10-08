@@ -74,6 +74,10 @@ pub fn coredump_with_classes_3_3_0() -> CoreDump {
     load_coredump("ruby-coredump-with-classes-3.3.0.gz").unwrap()
 }
 
+pub fn coredump_complex_3_4_5() -> CoreDump {
+    load_coredump("ruby-coredump-complex-3.4.5.gz").unwrap()
+}
+
 /// Allows testing offline with a core dump of a Ruby process.
 pub struct CoreDump {
     raw_memory: Vec<u8>,
@@ -214,6 +218,15 @@ mod tests {
         assert_eq!(
             buf,
             &[16, 115, 177, 241, 196, 85, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        );
+
+        let coredump = load_coredump("ruby-coredump-complex-3.4.5.gz").unwrap();
+        assert_eq!(coredump.elf_section_headers.len(), 152);
+        let buf = &mut [0u8; 16];
+        coredump.read(0x7f271feb5390, buf).expect("read failed");
+        assert_eq!(
+            buf,
+            &[16, 19, 104, 91, 119, 85, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         );
     }
 }
