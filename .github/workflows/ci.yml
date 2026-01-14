@@ -15,9 +15,9 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
     - name: Install Rust
-      uses: dtolnay/rust-toolchain@ed2356ad628626a6b3f5be6c3e0255c0454fcdb9 # stable branch
+      uses: dtolnay/rust-toolchain@4be9e76fd7c4901c61fb841f559994984270fce7 # stable branch
     - name: Run cargo fmt
       run: |
         cargo fmt --all -- --check
@@ -25,9 +25,9 @@ jobs:
   build:
     runs-on: ubuntu-24.04
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: Install Rust
-      uses: dtolnay/rust-toolchain@ed2356ad628626a6b3f5be6c3e0255c0454fcdb9 # stable branch
+      uses: dtolnay/rust-toolchain@4be9e76fd7c4901c61fb841f559994984270fce7 # stable branch
     - name: Build
       run: cargo build --release --locked
     - name: Run tests
