@@ -228,5 +228,14 @@ mod tests {
             buf,
             &[16, 19, 104, 91, 119, 85, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         );
+
+        let coredump = load_coredump("ruby-coredump-4.0.0.gz").unwrap();
+        assert_eq!(coredump.elf_section_headers.len(), 93);
+        let buf = &mut [0u8; 16];
+        coredump.read(0x7fa56b875738, buf).expect("read failed");
+        assert_eq!(
+            buf,
+            &[16, 147, 75, 251, 241, 85, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        );
     }
 }
