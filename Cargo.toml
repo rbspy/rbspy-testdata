@@ -11,7 +11,7 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1.0.100"
-flate2 = "1.1.4"
-goblin = "0.10.2"
-libc = "0.2.176"
+flate2 = "1.1.5"
+goblin = "0.10.4"
+libc = "0.2.178"
 remoteprocess = "0.5.1"
