@@ -78,6 +78,10 @@ pub fn coredump_complex_3_4_5() -> CoreDump {
     load_coredump("ruby-coredump-complex-3.4.5.gz").unwrap()
 }
 
+pub fn coredump_4_0_0() -> CoreDump {
+    load_coredump("ruby-coredump-4.0.0.gz").unwrap()
+}
+
 /// Allows testing offline with a core dump of a Ruby process.
 pub struct CoreDump {
     raw_memory: Vec<u8>,
