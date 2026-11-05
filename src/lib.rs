@@ -74,6 +74,10 @@ pub fn coredump_with_classes_3_3_0() -> CoreDump {
     load_coredump("ruby-coredump-with-classes-3.3.0.gz").unwrap()
 }
 
+pub fn coredump_complex_3_3_0() -> CoreDump {
+    load_coredump("ruby-coredump-complex-3.3.0.gz").unwrap()
+}
+
 pub fn coredump_complex_3_4_5() -> CoreDump {
     load_coredump("ruby-coredump-complex-3.4.5.gz").unwrap()
 }
