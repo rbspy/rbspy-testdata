@@ -10,8 +10,8 @@ readme = "README.md"
 edition = "2021"
 
 [dependencies]
-anyhow = "1.0.100"
-flate2 = "1.1.5"
-goblin = "0.10.4"
-libc = "0.2.178"
-remoteprocess = "0.5.1"
+anyhow = "1.0.102"
+flate2 = "1.1.10"
+goblin = "0.10.7"
+libc = "0.2.191"
+remoteprocess = "0.5.5"
